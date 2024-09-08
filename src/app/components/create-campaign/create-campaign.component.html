@@ -1,0 +1,199 @@
+<app-drop-down-menu></app-drop-down-menu>
+
+<div class="main-content">
+    <div class="centered-div" [ngClass]="{'no-padding': !isAuthenticated}">
+        <div *ngIf="isAuthenticated" class="text">
+            Create a campaign
+        </div>
+        <div class="validation-message" *ngIf="errorMessage !== ''">
+            {{errorMessage}}
+        </div>
+
+        <form *ngIf="isAuthenticated" [formGroup]="createCampaignFormGroup" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+                <div class="input-data">
+                    <input type="text" required formControlName="companyName">
+                    <div class="underline"></div>
+                    <label for="">Company Name</label>
+                </div>
+                <div class="input-data">
+                    <input type="text" required formControlName="title" (input)="onTitleInput($event)">
+                    <div class="underline"></div>
+                    <label for="">Title <span>( {{ 60 - createCampaignFormGroup.get('title')?.value.length }}
+                            characters
+                            left)</span></label>
+                </div>
+                <div class="input-data">
+                    <input type="text" required formControlName="youtubeLink">
+                    <div class="underline"></div>
+                    <label for="">Youtube Link</label>
+                </div>
+
+            </div>
+            <div class="form-row">
+
+                <div class="input-data">
+                    <input type="number" min="1" required formControlName="minimumInvestment"
+                        (input)="adjustValue($event,'minimumInvestment')">
+                    <div class="underline"></div>
+                    <label for="">Minimum Investment (€)</label>
+                </div>
+                <div class="input-data">
+                    <input type="number" required formControlName="goal">
+                    <div class="underline"></div>
+                    <label for="">Campaign Goal (min 500€)</label>
+                </div>
+                <div class="input-data">
+                    <input (input)="adjustValue($event,'duration')" type="number" min="1" max="60" required
+                        formControlName="duration">
+                    <div class="underline"></div>
+                    <label for="">Duration (max 60 days)</label>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-data textarea">
+                    <textarea rows="8" cols="80" required required formControlName="description"></textarea>
+                    <br />
+                    <div class="underline"></div>
+                    <label for="">Write your description</label>
+                    <br />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="select_mate" [attr.data-mate-select]="active ? 'active' : 'inactive'">
+                    <select #selectElem (change)="selectOption(selectElem.selectedIndex)" (click)="false" id="">
+                    </select>
+                    <p class="selected_option" (click)="openSelect()" #selectedOption>Select a Category</p>
+                    <span (click)="openSelect()" class="icon_select_mate">
+                        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+                            <path d="M0-.75h24v24H0z" fill="none" />
+                        </svg>
+                    </span>
+                    <div class="cont_list_select_mate">
+                        <ul class="cont_select_int">
+                            <li *ngFor="let option of options; let i = index" [class.active]="i === selectedIndex"
+                                (click)="selectOption(i)">
+                                {{ option }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Bank Details -->
+            <div class="form-row text">
+                Bank Details
+            </div>
+
+            <div class="form-row">
+
+                <div class="input-data">
+                    <input type="text" required formControlName="holderName">
+                    <div class="underline"></div>
+                    <label for="">Bank Account Holder Name</label>
+                </div>
+                <div class="input-data">
+                    <input type="text" required formControlName="bankIndentifier">
+                    <div class="underline"></div>
+                    <label for="">BIC/SWIFT</label>
+                </div>
+                <div class="input-data">
+                    <input type="text" required formControlName="accountNumber">
+                    <div class="underline"></div>
+                    <label for="">IBAN / Account Number</label>
+                </div>
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="reward-section">
+                    <h3 class="text" style="text-align: left;">Add a reward</h3>
+                    <div formArrayName="rewards">
+                        <div *ngFor="let rewardGroup of rewardsFormGroups() ['controls']; let i = index"
+                            class="reward-form">
+                            <div [formGroupName]="i">
+                                <div class="form-row">
+                                    <div class="input-data">
+                                        <input type="text" required formControlName="name">
+                                        <div class="underline"></div>
+                                        <label for="">Name</label>
+                                    </div>
+                                    <div class="input-data">
+                                        <input type="number" min="0" required formControlName="price"
+                                            (input)="adjustValue($event,'price',true,i)">
+                                        <div class="underline"></div>
+                                        <label for="">Price (€)</label>
+                                    </div>
+                                    <div class="input-data ">
+                                        <input class="file" accept="*" type="file" accept=".jpg, .jpeg, .png"
+                                            (change)="onFileChange($event, i)">
+                                    </div>
+                                    <div class="input-data reward-description">
+                                        <input type="text" required formControlName="description">
+
+                                        <div class="underline"></div>
+                                        <label for="">Description</label>
+                                    </div>
+                                    <div class="remove-button-container">
+                                        <button (click)="removeItem(i)" class="bin-button">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 39 7"
+                                                class="bin-top">
+                                                <line stroke-width="4" stroke="white" y2="5" x2="39" y1="5"></line>
+                                                <line stroke-width="3" stroke="white" y2="1.5" x2="26.0357" y1="1.5"
+                                                    x1="12"></line>
+                                            </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 33 39"
+                                                class="bin-bottom">
+                                                <mask fill="white" id="path-1-inside-1_8_19">
+                                                    <path
+                                                        d="M0 0H33V35C33 37.2091 31.2091 39 29 39H4C1.79086 39 0 37.2091 0 35V0Z">
+                                                    </path>
+                                                </mask>
+                                                <path mask="url(#path-1-inside-1_8_19)" fill="white"
+                                                    d="M0 0H33H0ZM37 35C37 39.4183 33.4183 43 29 43H4C-0.418278 43 -4 39.4183 -4 35H4H29H37ZM4 43C-0.418278 43 -4 39.4183 -4 35V0H4V35V43ZM37 0V35C37 39.4183 33.4183 43 29 43V35V0H37Z">
+                                                </path>
+                                                <path stroke-width="4" stroke="white" d="M12 6L12 29"></path>
+                                                <path stroke-width="4" stroke="white" d="M21 6V29"></path>
+                                            </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 89 80"
+                                                class="garbage">
+                                                <path fill="white"
+                                                    d="M20.5 10.5L37.5 15.5L42.5 11.5L51.5 12.5L68.75 0L72 11.5L79.5 12.5H88.5L87 22L68.75 31.5L75.5066 25L86 26L87 35.5L77.5 48L70.5 49.5L80 50L77.5 71.5L63.5 58.5L53.5 68.5L65.5 70.5L45.5 73L35.5 79.5L28 67L16 63L12 51.5L0 48L16 25L22.5 17L20.5 10.5Z">
+                                                </path>
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="plus-button" (click)="addReward()"></button>
+                </div>
+            </div>
+
+            <div class="form-row submit-btn">
+                <div class="input-data">
+                    <div class="inner"></div>
+                    <input type="submit" value="create">
+                </div>
+            </div>
+        </form>
+        <div *ngIf="!isAuthenticated" class="video-details not-authenticated">
+            <div class="login-content">
+                <div class="login-icon">
+                    <i class="fas fa-user-lock"></i>
+                </div>
+                <div class="message">
+                    <p class="text-not-authenticated">To create a new campaign,<br> you must first
+                        authenticate.</p>
+                </div>
+                <button class="submit-button ghost" routerLink="/login">Sign in</button>
+            </div>
+        </div>
+    </div>
+</div>

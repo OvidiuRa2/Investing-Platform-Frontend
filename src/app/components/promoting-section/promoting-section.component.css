@@ -1,0 +1,46 @@
+.promote-section {
+    background-color: #f0f0f0;
+    padding: 50px 0;
+}
+
+.promote-section h2 {
+    color: #333;
+}
+
+.promote-section p {
+    color: #666;
+}
+
+.promote-section img {
+    max-width: 100%;
+}
+
+
+.btn.btn-primary {
+    font-family: "Quicksand", sans-serif;
+    font-weight: bold;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    padding: 0 3rem;
+    border: 0;
+    border-radius: 3rem;
+    background-image: linear-gradient(131deg, #211C6A, #5336AD, #5336AD, #5336AD);
+    background-size: 300% 100%;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn.btn-primary:hover:enabled {
+    box-shadow: 0 0.5em 0.5em -0.4em #211C6A;
+    background-size: 100% 100%;
+    transform: translateY(-0.15em);
+}
+
+.img-promoting {
+    max-width: 400px;
+    max-height: 300px;
+}
+
+.promote-image {
+    display: flex;
+    justify-content: center;
+}

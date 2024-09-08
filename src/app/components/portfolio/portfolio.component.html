@@ -1,0 +1,200 @@
+<app-drop-down-menu></app-drop-down-menu>
+<div class="container-xl px-4 mt-4">
+
+    <nav class="nav nav-borders">
+        <a class="nav-link  ms-0" routerLink="/profile">Profile</a>
+        <a class="nav-link  active ms-0" routerLink="/portfolio">Portfolio</a>
+    </nav>
+    <hr class="mt-0 mb-4">
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+
+            <div class="card h-100 border-start-lg border-start-primary">
+                <div class="card-body">
+                    <div class="small text-muted">Total amount invested</div>
+                    <div class="h3">{{totalInvested}} € </div>
+                    <a class="text-arrow-icon small" routerLink="/opportunities">
+                        Create new investment
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-arrow-right">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+
+            <div class="card h-100 border-start-lg border-start-secondary">
+                <div class="card-body">
+                    <div class="small text-muted">Total rewards selected</div>
+                    <div class="h3">{{totalRewardsSelected}}</div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+
+            <div class="card h-100 border-start-lg border-start-success">
+                <div class="card-body">
+                    <div class="small text-muted">Total campaigns created</div>
+                    <div class="h3 d-flex align-items-center">{{totalCampaignsSelected}}</div>
+                    <a class="text-arrow-icon small text-success" routerLink="/campaign">
+                        Create new campaign
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-arrow-right">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Investments history card-->
+    <div class="card mb-4 investment-table">
+        <div class="card-header">Investments History</div>
+        <div class="card-body p-0">
+            <!-- Investments history table-->
+            <div class="table-responsive table-billing-history">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="border-gray-200 company-name" scope="col">Company Name</th>
+                            <th class="border-gray-200 table-date" scope="col">Date</th>
+                            <th class="border-gray-200 investment" scope="col">Amount Invested in Startup</th>
+                            <th class="border-gray-200 investment" scope="col">Amount Invested in Startup Pulse</th>
+                            <th class="border-gray-200" scope="col">Rewards Selected</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let investment of user.investments; let i = index">
+                            <td>{{getCompanyName(investment)}}</td>
+                            <td>{{ investment.date }}</td>
+                            <td>{{ investment.amountInvestedStartup }} €</td>
+                            <td>{{ investment.amountInvestedPlatform }} €</td>
+                            <td class="reward-details">{{rewardsDetails[i]}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<h1 class="camapings-header">Your Campaigns</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="reward-item col-md-4" *ngFor="let receivedCampaign of user.campaigns" class="centered-div">
+            <h1 class="video-title">{{receivedCampaign.title}}</h1>
+            <div class="video">
+                <iframe [src]="receivedCampaign.youtubeLink.toString() | safe: 'resourceUrl'" frameborder="0"
+                    allowfullscreen></iframe>
+                <div *ngIf="isAuthenticated" class="video-details">
+                    <div class="company-info">
+                        <h2>{{receivedCampaign.companyName}} <span
+                                class="invested-amount">{{getTotalInvestment(receivedCampaign)}} € /
+                                {{receivedCampaign.goal}} € </span></h2>
+                        <div class="investment-amount">
+
+                        </div>
+                        <div class="campaign-state"
+                            [ngClass]="{'open': receivedCampaign.state === 'OPEN', 'closed': receivedCampaign.state !== 'OPEN'}">
+                            <p><strong>State: </strong><span class="state-text">{{receivedCampaign.state}} </span>
+                                <span class="days-left"> Days left: {{getDaysLeft(receivedCampaign)}} </span>
+                                <span *ngIf="receivedCampaign.state == 'OPEN'">Min investment:
+                                    {{receivedCampaign.minimumInvestment}}
+                                    €</span>
+                            </p>
+
+                        </div>
+                    </div>
+                    <div class="investment-container">
+                        <div class="investment-details">
+
+                            <button class="invest-button" (click)="showRewardsTable(receivedCampaign)">See
+                                Rewards</button>
+                            <button class="invest-button" (click)="showInvestmentsTable(receivedCampaign)">See
+                                Investments</button>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="video-description">{{receivedCampaign.description}}</div>
+        </div>
+    </div>
+</div>
+<div class="container-xl px-4 mt-4">
+
+    <!-- Rewards in specific campaign-->
+    <div id="rewards-section" *ngIf="showRewards" class="card mb-4 investment-table">
+        <div class="card-header">Rewards for {{rewardsSelectedCampaign.companyName}}</div>
+        <div class="card-body p-0">
+            <!-- rewards  table-->
+            <div class="table-responsive table-billing-history">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="border-gray-200" scope="col">Image</th>
+                            <th class="border-gray-200" scope="col">Name</th>
+                            <th class="border-gray-200" scope="col">Description</th>
+                            <th class="border-gray-200" scope="col">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let reward of rewardsSelectedCampaign.rewards; let i = index">
+                            <td><img class="reward-image" [src]="reward.imageUrl" alt="Reward Image">
+                            </td>
+                            <td>
+                                <div class="reward-description">{{ reward.name }}</div>
+                            </td>
+                            <td>
+                                <div class="reward-description">{{ reward.description }}</div>
+                            </td>
+                            <td class="price-td">{{ reward.price }} €</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Investments in specific campaign-->
+    <div id="invest-section" *ngIf="showInvestments" class="card mb-4 investment-table">
+        <div class="card-header">Investments in {{investmentsSelectedCampaign.companyName}}</div>
+        <div class="card-body p-0">
+            <!-- Investments history table-->
+            <div class="table-responsive table-billing-history">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th class="border-gray-200  investor-email" scope="col">Investor email</th>
+                            <th class="border-gray-200 table-date" scope="col">Date</th>
+                            <th class="border-gray-200" scope="col">Amount Invested in Startup</th>
+                            <th class="border-gray-200" scope="col">Amount Invested in Startup Pulse</th>
+                            <th class="border-gray-200" scope="col">Rewards Selected</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let investment of investmentsSelectedCampaign.investments; let i = index">
+                            <td>{{ findInvestorEmailByInvestmentId(investment) }}</td>
+                            <td>{{ investment.date }}</td>
+                            <td>{{ investment.amountInvestedStartup }} €</td>
+                            <td>{{ investment.amountInvestedPlatform }} €</td>
+                            <td style="white-space: pre;">{{this.concatRewards(investment)}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+</div>

@@ -1,0 +1,54 @@
+<app-drop-down-menu></app-drop-down-menu>
+<div class="main-content">
+    <div class="section-content section-content-p30">
+        <div class="container-fluid">
+            <!-- Search and Filter Section -->
+            <div class="row mb-4 align-items-center">
+                <div class="col-md-6 d-flex">
+                    <div ngbDropdown class="mr-3">
+                        <button class="btn-category-filter dropdown-toggle" id="categoryDropdown" ngbDropdownToggle>
+                            {{ selectedCategory || 'All Categories' }}
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="categoryDropdown">
+                            <button class="dropdown-item" (click)="filterCampaigns('')">All
+                                Categories</button>
+                            <button *ngFor="let category of categories" class="dropdown-item"
+                                (click)="filterCampaigns(category)">{{category}}</button>
+                        </div>
+                    </div>
+
+                    <div class="search__wrapper">
+                        <input type="text" name="" placeholder="Search for campaigns" class="search__field"
+                            [(ngModel)]="searchTitle" (input)="filterCampaigns(selectedCategory)">
+                        <button type="submit" class="fa fa-search search__icon"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div *ngFor="let tempCampaign of campaigns" class="col-md-4">
+                    <div class="video-container">
+                        <iframe [src]="tempCampaign.youtubeLink.toString() | safe: 'resourceUrl'" frameborder="0"
+                            allowfullscreen></iframe>
+                        <div class="video-info">
+                            <div class="video-title">{{tempCampaign.title}}</div>
+                            <div class="video-description">{{tempCampaign.description}}</div>
+                            <button (click)="sendObject(tempCampaign)" class="btn"><span>See details</span></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-pagination">
+                    <div></div>
+                    <div *ngIf="campaigns?.length != 0" class="pagination">
+                        <ngb-pagination [(page)]="thePageNumber" [pageSize]="thePageSize"
+                            [collectionSize]="theTotalElements" [maxSize]="5" [boundaryLinks]="true"
+                            (pageChange)="listCampaigns(searchTitle,selectedCategory)"></ngb-pagination>
+                    </div>
+                </div>
+                <div *ngIf="showAlert && campaigns?.length == 0" class="alert alert-warning col-md-12" role="alert">
+                    No campaigns found.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

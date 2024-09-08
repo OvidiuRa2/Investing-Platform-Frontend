@@ -1,0 +1,76 @@
+<app-drop-down-menu></app-drop-down-menu>
+
+<div class="main-content">
+    <div class="centered-div">
+        <h1 class="video-title">{{receivedCampaign.title}}</h1>
+        <div class="video">
+            <iframe [src]="receivedCampaign.youtubeLink.toString() | safe: 'resourceUrl'" frameborder="0"
+                allowfullscreen></iframe>
+            <div *ngIf="isAuthenticated" class="video-details">
+                <div class="company-info">
+                    <h2>{{receivedCampaign.companyName}}</h2>
+                    <div class="campaign-state"
+                        [ngClass]="{'open': receivedCampaign.state === 'OPEN', 'closed': receivedCampaign.state !== 'OPEN'}">
+                        <p><strong>State: </strong><span class="state-text">{{receivedCampaign.state}} </span> <span
+                                class="days-left"> Days left: {{daysRemained}} </span>
+                        </p>
+
+                    </div>
+                    <section class="contact">
+                        <div class="contact-container">
+                            <h2>Contact Information</h2>
+                            <div class="contact-details">
+                                <div class="contact-info">
+                                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                                    <div class="contact-text">
+                                        <p><strong>Email:</strong></p>
+                                        <p>{{email}}</p>
+                                    </div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                                    <div class="contact-text">
+                                        <p><strong>Phone Number:</strong></p>
+                                        <p>{{phoneNumber}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+                <div class="investment-container">
+                    <div class="investment-details">
+                        <div class="investment-amount">
+                            <p class="invested-amount">{{totalInvested}} € / {{receivedCampaign.goal}} € </p>
+                            <p class="subtext">Total amount invested</p>
+                        </div>
+                        <button *ngIf="receivedCampaign.state == 'OPEN'" routerLink="/invest"
+                            class="invest-button">Invest in
+                            {{receivedCampaign.companyName}}</button>
+                        <span *ngIf="receivedCampaign.state == 'OPEN'">Minimum investment starting from:
+                            <strong>{{receivedCampaign.minimumInvestment}}
+                                €</strong></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div *ngIf="!isAuthenticated" class="video-details not-authenticated">
+                <div class="login-content">
+                    <div class="login-icon">
+                        <i class="fas fa-user-lock"></i>
+                    </div>
+                    <div class="message">
+                        <p class="text-not-authenticated">To view all the project information,<br> you must first
+                            authenticate.</p>
+                    </div>
+                    <button routerLink="/login" class="ghost">Sign in</button>
+                </div>
+            </div>
+        </div>
+        <div class="video-description">{{receivedCampaign.description}}</div>
+
+    </div>
+
+</div>

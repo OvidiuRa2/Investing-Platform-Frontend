@@ -1,0 +1,93 @@
+<app-drop-down-menu></app-drop-down-menu>
+
+<div class="content-container">
+    <div class="left-side">
+        <div class="investment-section">
+            <p class="investment-text">You're investing in</p>
+            <h1 class="company-name">{{ receivedCampaign.companyName }} - {{receivedCampaign.title}}</h1>
+        </div>
+
+        <div class="donation-section">
+            <p class="text-input">You are contributing with </p>
+            <div class="input-container">
+                <span class="currency">€</span>
+                <input id="company-contribution" min="0" type="number" class="number-input" placeholder="0" [value]="0"
+                    (input)="addContribution($event)">
+            </div>
+
+        </div>
+        <div class="tip-section">
+            <p class="text-input">Support Startup Pulse</p>
+            <div class="input-container">
+                <span class="currency">€</span>
+                <input id="platform-contribution" min="0" type="number" class="number-input" placeholder="0" [value]="0"
+                    (input)="addContributionPlatform($event)">
+            </div>
+        </div>
+        <button class="rewardButton btn btn-primary" (click)="scrollToSection('reward-section')">
+            Add a reward
+        </button>
+
+
+    </div>
+
+    <div class="right-side">
+        <div class="total-container">
+            <div class="total-header">
+                <h3 class="total">Total</h3>
+            </div>
+            <div class="total-amount">
+                <p class="total-text">Total amount:</p>
+                <p class="amount">{{ totalContribution }}</p>
+                <p class="currency">€</p>
+
+            </div>
+            <div *ngIf="displayError!==''" class="error">
+                {{displayError}}
+            </div>
+            <div class="checkout-container">
+                <button class="checkoutButton btn btn-primary" (click)="pay()">
+                    Checkout
+                </button>
+            </div>
+            <div class="disclosure">
+                <h5 class="disclosure-title"> Crowdfunding is not shopping.</h5>
+                <p class="disclosure-text"> Your contribution is a way to support an entrepreneur, but does not
+                    guarantee that you will receive
+                    a
+                    reward.</p>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+<hr>
+<section id="reward-section">
+    <div class="rewards-section">
+        <h3 class="reward-header">Add Rewards</h3>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="reward-item col-md-4" *ngFor="let reward of receivedCampaign.rewards">
+                    <div class="reward-container">
+
+                        <img class="reward-image" src={{reward.imageUrl}} alt="" srcset="">
+                        <div class="reward-info">
+                            <div class="reward-title">{{reward.name}}</div>
+                            <div class="reward-description">{{reward.description}}
+                            </div>
+
+                            <h3 class="price">{{reward.price}} € </h3>
+                            <div class="quantity-input">
+                                <button class="decrement-button" (click)="decrementQuantity(reward)">-</button>
+                                <div class="quantity">{{rewardsSelected.get(reward)}}</div>
+                                <button class="increment-button" (click)="incrementQuantity(reward)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

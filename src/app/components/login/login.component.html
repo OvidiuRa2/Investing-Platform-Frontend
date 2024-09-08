@@ -1,0 +1,114 @@
+<app-drop-down-menu></app-drop-down-menu>
+
+<div class="context">
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form [formGroup]="signUpFormGroup" (ngSubmit)="onSignUp()">
+                <div formGroupName="signUpUser">
+                    <h1>Create Account</h1>
+
+                    <div *ngIf="emailAlreadyExists" class="error validation-message">
+                        Email-ul introdus este deja folosit. Vă rugăm să introduceți un alt email.
+                    </div>
+                    <div *ngIf="name?.invalid &&(name?.dirty || name?.touched)" class="validation-message">
+                        <div *ngIf="name?.errors?.['required'] ||name?.errors?.['notOnlyWhitespace']" class="error">
+                            Name is required
+                        </div>
+                        <div *ngIf="name?.errors?.['minlength']" class="error">
+                            Name must be at least 2 characters long
+                        </div>
+
+                    </div>
+                    <input type="text" formControlName="name" placeholder="Name" />
+                    <div *ngIf="email?.invalid &&(email?.dirty || email?.touched)" class="validation-message">
+                        <div *ngIf="email?.errors?.['required']" class="error">
+                            Email is required
+                        </div>
+                        <div *ngIf="email?.errors?.['pattern']" class="error">
+                            Email must be a valid address format
+                        </div>
+
+                    </div>
+                    <input type="email" formControlName="email" placeholder="Email" />
+                    <div *ngIf="password?.invalid &&(password?.dirty || password?.touched)" class="validation-message">
+                        <div *ngIf="password?.errors?.['required'] ||password?.errors?.['notOnlyWhitespace']"
+                            class="error">
+                            Password is required
+                        </div>
+                        <div *ngIf="password?.errors?.['minlength']" class="error">
+                            Password must be at least 2 characters long
+                        </div>
+
+                    </div>
+                    <input type="password" formControlName="password" placeholder="Password" />
+
+                    <div *ngIf="phoneNumber?.invalid &&(phoneNumber?.dirty || phoneNumber?.touched)"
+                        class="validation-message">
+                        <div *ngIf="phoneNumber?.errors?.['required']" class="error">
+                            Phone Number is required
+                        </div>
+                        <div *ngIf="phoneNumber?.errors?.['pattern']" class="error">
+                            Phone Number must be a valid phone number(Ex:. +40123456789)
+                        </div>
+
+                    </div>
+                    <input type="tel" id="phoneNumber" formControlName="phoneNumber" placeholder="Phone Number" />
+
+                    <button>Sign Up</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="form-container sign-in-container">
+
+
+            <form [formGroup]="signInFormGroup" (ngSubmit)="onSignIn()">
+                <div formGroupName="signInUser">
+                    <h1>Sign in</h1>
+                    <div class="login-validation-message" *ngIf="errorMessage !== ''">
+                        {{errorMessage}}
+                    </div>
+                    <div *ngIf="signInEmail?.invalid &&(signInEmail?.dirty || signInEmail?.touched)"
+                        class="validation-message">
+                        <div *ngIf="signInEmail?.errors?.['required']" class="error">
+                            Email is required
+                        </div>
+                        <div *ngIf="signInEmail?.errors?.['pattern']" class="error">
+                            Email must be a valid address format
+                        </div>
+
+                    </div>
+                    <input type="email" formControlName="signInEmail" placeholder="Email" />
+
+                    <div *ngIf="signInPassword?.invalid &&(signInPassword?.dirty || signInPassword?.touched)"
+                        class="validation-message">
+                        <div *ngIf="signInPassword?.errors?.['required'] ||signInPassword?.errors?.['notOnlyWhitespace']"
+                            class="error">
+                            Password is required
+                        </div>
+                        <div *ngIf="signInPassword?.errors?.['minlength']" class="error">
+                            password must be at least 2 characters long
+                        </div>
+                    </div>
+                    <input type="password" formControlName="signInPassword" placeholder="Password" />
+                    <a (click)="resetPassword()">Forgot your password?</a>
+                    <button>Sign In</button>
+                </div>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>Login with your account to access all the features and benefits.</p>
+                    <button class="ghost" id="signIn" (click)="changePanel('signIn')">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Create Account</h1>
+                    <p>Sign up now to unlock a world of investment opportunities and exclusive rewards.</p>
+                    <button class="ghost" id="signUp" (click)="changePanel('signUp')">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

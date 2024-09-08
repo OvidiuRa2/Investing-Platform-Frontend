@@ -1,0 +1,58 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
+
+    <a class="navbar-brand" routerLink="/home">
+        <img src="assets/images/logo.png" alt="Logo" height="60">
+    </a>
+
+    <!-- Dropdown Menu -->
+    <ul class="nav-list">
+
+        <li> Investors
+            <ul class="dropdown">
+                <li><a routerLink="/opportunities" class="dropdown-item" href="#">Investment Opportunities <i
+                            class="fa-solid fa-money-bill"></i></a>
+                </li>
+            </ul>
+        </li>
+        <li> Startups
+            <ul class="dropdown">
+                <li><a routerLink="/campaign" class="dropdown-item">Create Campaign <i
+                            class="fa-solid fa-rectangle-ad"></i></a></li>
+            </ul>
+        </li>
+        <li> Contact
+            <ul class="dropdown">
+                <li><a routerLink="/aboutUs" class="dropdown-item" href="#">About us <i
+                            class="fa-solid fa-circle-info"></i></a></li>
+                <li><a routerLink="/help" class="dropdown-item">Help Center<i
+                            class="fa-solid fa-handshake-angle"></i></a></li>
+            </ul>
+        </li>
+    </ul>
+    <div class="auth-buttons">
+        <button *ngIf="!isAuthenticated" routerLink="/login" class="btn btn-login">Sign in</button>
+        <div *ngIf="isAuthenticated">
+            <ul class="nav-list">
+                <li> <img class="profileImage" src={{user.imageUrl}} alt="" srcset="">
+                    {{this.user.name}}
+                    <ul class="dropdown profile">
+                        <li><a routerLink="/opportunities" class="dropdown-item"><i-feather class="icon"
+                                    name="trending-up"></i-feather> Invest </a>
+                        </li>
+                        <li><a routerLink="/portfolio" class="dropdown-item"><i-feather class="icon"
+                                    name="briefcase"></i-feather> Portfolio</a>
+                        </li>
+                        <li><a routerLink="/profile" class="dropdown-item"><i-feather class="icon"
+                                    name="user"></i-feather> Profile</a>
+                        </li>
+
+                        <li> <a (click)="logout()" class="dropdown-item"> <i-feather class="icon"
+                                    name="log-out"></i-feather>
+                                Logout </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
